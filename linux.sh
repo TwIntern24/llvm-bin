@@ -4,19 +4,10 @@ set -e
 # Always run relative to this script's directory
 cd "$(dirname "$(realpath "$0")")"
 
-# Update git submodules
-git submodule init
-git submodule update
-
 # Clone LLVM
 if [ ! -d "llvm-project" ]; then
     git clone --depth 1 https://github.com/llvm/llvm-project.git
 fi
-
-# Copy Zig toolchain files into llvm-project
-cp zig-cross/x86_64-windows-gnu.cmake llvm-project/
-mkdir -p llvm-project/cmake
-cp -r zig-cross/cmake/* llvm-project/cmake/
 
 # Enter LLVM dir
 cd llvm-project
@@ -24,10 +15,7 @@ cd llvm-project
 # Configure LLVM
 cmake -S llvm -B build \
     -G Ninja \
-    -DCMAKE_TOOLCHAIN_FILE="$PWD/x86_64-windows-gnu.cmake" \
-    -DCMAKE_MAKE_PROGRAM="$(command -v ninja)" \
     -DCMAKE_BUILD_TYPE=Release \
-    -DZIG_TARGET=x86_64-windows-gnu \
     -DCMAKE_BUILD_WITH_INSTALL_RPATH=ON \
     --log-level=DEBUG
 
