@@ -19,6 +19,11 @@ pkgs.mkShell {
         export ZLIB_LIBRARY="${pkgs.zlib}/lib"
         export LIBLZMA_LIBRARY="${pkgs.xz.dev}/lib"
 
+	export CC="${pkgs.zig}/bin/zig cc"
+	export CXX="${pkgs.zig}/bin/zig c++"
+	export CFLAGS="-target x86_64-windows-gnu"
+	export CXXFLAGS="-target x86_64-windows-gnu"
+
         export CMAKE_PREFIX_PATH="${pkgs.zlib}:${pkgs.xz}:${pkgs.libxml2}:$CMAKE_PREFIX_PATH"
     '';
 }
